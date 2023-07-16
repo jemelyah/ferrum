@@ -181,7 +181,10 @@ describe Ferrum::Browser do
             proxy: { host: proxy.host, port: proxy.port, user: "u1", password: "p1" }
           )
 
-          browser.go_to("https://example.com")
+          expect { browser.go_to("https://example.com") }.to raise_error(
+            Ferrum::StatusError,
+            "Request to https://example.com failed (net::ERR_HTTP_RESPONSE_CODE_FAILURE)"
+          )
           expect(browser.network.status).to eq(407)
         ensure
           browser&.quit
@@ -530,8 +533,11 @@ describe Ferrum::Browser do
         it "fails with wrong password" do
           page = browser.create_page(proxy: { host: proxy.host, port: proxy.port,
                                               user: options[:user], password: "$$" })
-          page.go_to("https://example.com")
 
+          expect { page.go_to("https://example.com") }.to raise_error(
+            Ferrum::StatusError,
+            "Request to https://example.com failed (net::ERR_HTTP_RESPONSE_CODE_FAILURE)"
+          )
           expect(page.network.status).to eq(407)
         end
 

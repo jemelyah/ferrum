@@ -21,6 +21,7 @@ puts ""
 RSpec.configure do |config|
   ferrum_logger = nil
   config.include_context "Global helpers"
+  config.fail_fast = true if ENV["CI"]
 
   config.before(:suite) do
     @server = Ferrum::Server.boot
