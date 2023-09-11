@@ -13,6 +13,7 @@ describe Ferrum::Frame do
     page.go_to("/ferrum/frames")
     frame = page.at_xpath("//iframe").frame
     expect(frame.url).to end_with("/ferrum/slow")
+    puts page.command("Page.getFrameTree")
   end
 
   it "supports selection by element" do

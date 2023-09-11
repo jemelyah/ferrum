@@ -63,6 +63,8 @@ module Ferrum
       start = Utils::ElapsedTime.monotonic_time
 
       until idle?(connections)
+        # puts '=='*100
+        # puts @traffic.select(&:pending?).map{|e| [e.request.url, e.response&.loaded?, e.response]}.inspect
         raise TimeoutError if Utils::ElapsedTime.timeout?(start, timeout)
 
         sleep(duration)

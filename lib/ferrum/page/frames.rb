@@ -55,7 +55,7 @@ module Ferrum
       #
       def frame_by(id: nil, name: nil, execution_id: nil)
         if id
-          @frames[id]
+          @frames[id] || context.frames.find { |f| f.target_id == id }
         elsif name
           frames.find { |f| f.name == name }
         elsif execution_id

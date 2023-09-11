@@ -71,7 +71,12 @@ module Ferrum
     # @return [Cookies]
     attr_reader :cookies
 
-    def initialize(target_id, browser, proxy: nil)
+    def frame?
+      @frame
+    end
+
+    def initialize(target_id, browser, proxy: nil, frame: false)
+      @frame = frame
       @frames = Concurrent::Map.new
       @main_frame = Frame.new(nil, self)
       @browser = browser
@@ -386,6 +391,8 @@ module Ferrum
       end
 
       inject_extensions
+
+      return if frame?
 
       width, height = @browser.window_size
       resize(width: width, height: height)

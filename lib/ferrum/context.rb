@@ -40,6 +40,12 @@ module Ferrum
       windows.map(&:page)
     end
 
+    def frames(pos = nil, size = 1)
+      frames = @targets.values.select(&:frame?)
+      frames = frames.send(pos, size) if pos
+      frames.map(&:page)
+    end
+
     def create_page(**options)
       target = create_target
       target.page = target.build_page(**options)
@@ -58,7 +64,7 @@ module Ferrum
 
     def add_target(params)
       target = Target.new(@browser, params)
-      if target.window?
+      if target.window? || target.frame?
         @targets.put_if_absent(target.id, target)
       else
         @pendings.put(target, @browser.timeout)

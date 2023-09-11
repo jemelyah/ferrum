@@ -317,7 +317,7 @@ describe Ferrum::Network do
 
     context "with :resource_type argument" do
       it "raises an error with wrong type" do
-        expect { network.intercept(resource_type: :BlaBla) }.to raise_error(ArgumentError)
+        expect { network.intercept(resource_type: :WebSocket) }.to raise_error(ArgumentError)
       end
 
       it "intercepts only given type" do

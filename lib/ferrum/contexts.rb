@@ -53,7 +53,7 @@ module Ferrum
     def subscribe
       @browser.client.on("Target.targetCreated") do |params|
         info = params["targetInfo"]
-        next unless info["type"] == "page"
+        next unless %w[page iframe].include?(info["type"])
 
         context_id = info["browserContextId"]
         @contexts[context_id]&.add_target(info)

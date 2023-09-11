@@ -28,7 +28,7 @@ module Ferrum
 
     def build_page(**options)
       maybe_sleep_if_new_window
-      Page.new(id, @browser, **options)
+      Page.new(id, @browser, **options.merge(frame: frame?))
     end
 
     def id
@@ -57,6 +57,10 @@ module Ferrum
 
     def window?
       !!opener_id
+    end
+
+    def frame?
+      type == "iframe"
     end
 
     def maybe_sleep_if_new_window
