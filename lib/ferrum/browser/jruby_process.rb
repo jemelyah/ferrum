@@ -5,6 +5,8 @@ require "ferrum/browser/process"
 module Ferrum
   class Browser
     class JrubyProcess < Process
+      RESCUED_ERRORS = [Errno::ESRCH, Errno::ECHILD, Errno::EBADF].freeze
+
       def start
         # Don't do anything as browser is already running as external process.
         return if ws_url
@@ -32,7 +34,11 @@ module Ferrum
             environment.merge! Hash(@xvfb&.to_env)
           end
 
-          @process = process_builder.start
+          @process = begin
+            process = process_builder.start
+            sleep @process_timeout
+            process
+          end
           @pid = @process.pid
 
           parse_ws_url(output_file, @process_timeout)

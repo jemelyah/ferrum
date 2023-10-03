@@ -15,6 +15,7 @@ module Ferrum
     class Process
       KILL_TIMEOUT = 2
       WAIT_KILLED = 0.05
+      RESCUED_ERRORS = [Errno::ESRCH, Errno::ECHILD].freeze
 
       attr_reader :host, :port, :ws_url, :pid, :command,
                   :default_user_agent, :browser_version, :protocol_version,
@@ -44,7 +45,7 @@ module Ferrum
               break
             end
           end
-        rescue Errno::ESRCH, Errno::ECHILD
+        rescue RESCUED_ERRORS
           # nop
         end
       end
@@ -180,7 +181,7 @@ module Ferrum
         ios.each do |io|
           io.close unless io.closed?
         rescue IOError
-          raise unless Utils::Platform.jruby?
+          raise
         end
       end
     end

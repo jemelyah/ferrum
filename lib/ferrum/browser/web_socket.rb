@@ -38,7 +38,7 @@ module Ferrum
 
               @driver.parse(data)
             end
-          rescue EOFError, Errno::ECONNRESET, Errno::EPIPE
+          rescue EOFError, Errno::ECONNRESET, Errno::EPIPE, Errno::EBADF, IOError
             @messages.close
           end
         end
