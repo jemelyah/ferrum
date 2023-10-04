@@ -45,7 +45,7 @@ module Ferrum
               break
             end
           end
-        rescue RESCUED_ERRORS
+        rescue *RESCUED_ERRORS
           # nop
         end
       end
